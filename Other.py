@@ -26,3 +26,23 @@ def converter(pp, val, pair):
     elif pp == "price":
         base = pip[pair]
         return float(amount * base)
+
+
+def timecheck(forback):
+    time = datetime.now()
+    new = time + (datetime.min - time) % timedelta(minutes = 30)
+    hourly = time + (datetime.min - time) % timedelta(minutes = 60)
+    hourlystrip = str(hourly - time).lstrip("0:")
+    almosthour = hourlystrip[:len(hourlystrip) - 10]
+    final = str(new - time).lstrip("0:")
+    almost = final[:len(final) - 10]
+    if forback == "forward":
+        return float(almost) + 1
+    elif forback == "back":
+        return 30 - (float(almost) + 1)
+    elif forback == "start":
+        rounded = time - (time - datetime.min) % timedelta(minutes=30)
+        return rounded.strftime("%Y-%m-%dT%H:%M:00Z")
+    elif forback == "hour":
+        return float(almosthour) + 1
+
