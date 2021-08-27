@@ -17,7 +17,8 @@ def start():
 def converter(pp, val, pair):
     pip = {
         "GBP_AUD": 0.0001,
-        "GBP_CAD": 0.0001
+        "GBP_CAD": 0.0001,
+        "EUR_CAD": 0.0001
     }
     amount = float(val)
     if pp == "pip":

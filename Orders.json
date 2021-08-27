@@ -1,10 +1,20 @@
 {
-  "GBP_CAD": {
-    "open": [],
-    "closed": []
-  },
-  "CAD_JPY": {
-    "open": [],
-    "closed": []
-  }
+    "GBP_CAD": {
+        "open": [
+            [
+                123
+            ],
+            [
+                123
+            ],
+            [
+                456
+            ]
+        ],
+        "closed": []
+    },
+    "CAD_JPY": {
+        "open": [],
+        "closed": []
+    }
 }
