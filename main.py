@@ -16,8 +16,8 @@ mouse = Controller()
 
 
 def init():
-    Indicators.dumpcur("EUR_CAD")
-    Indicators.dumphis("EUR_CAD", "M30")
+    Indicators.dumpcur("GBP_USD")
+    Indicators.dumphis("GBP_USD", "M30")
     Indicators.machis()
     Indicators.atrhis()
     Indicators.cmfhis()
@@ -35,7 +35,7 @@ def back():
     bid = float(cur["prices"][0]["bids"][0]["price"])
     asks = float(cur["prices"][0]["asks"][0]["price"])
     for i in range(46, len(data)):
-        if float(data[i]["macd"][0]) > 0 and float(data[i]["macd"][1]) > 0:
+        if float(data[i]["macd"][0]) > 0.0003 and float(data[i]["macd"][1]) > 0.0003:
             con1 = float(data[i-1]["macd"][0]) < float(data[i-1]["macd"][1])
             con2 = float(data[i]["macd"][0]) > float(data[i]["macd"][1])
             if float(data[i]["cmf"]) > 0:
@@ -51,7 +51,7 @@ def back():
             elif float(data[i-1]["macd"][0]) < 0 or float(data[i-1]["macd"][1]) < 0:
                 # place the order, possibly create a new function to do this
                 print("buy", data[i]["time"], data[i]["atr"])
-        elif float(data[i]["macd"][0]) < 0 and float(data[i]["macd"][1]) < 0:
+        elif float(data[i]["macd"][0]) < 0.0003 and float(data[i]["macd"][1]) < 0.0003:
             con1 = float(data[i-1]["macd"][0]) > float(data[i-1]["macd"][1])
             con2 = float(data[i]["macd"][0]) < float(data[i]["macd"][1])
             if float(data[i]["cmf"]) < 0:
@@ -170,7 +170,13 @@ def watch(pair):
 
 
 # watch("GBP_CAD")
-back()
+# back()
+while True:
+    with open("Orders.json", "r") as read:
+        orders = json.load(read)
+    # if len(orders["GBP_CAD"]["open"]) == 0:
+    if Other.timecheck("hour") == 60 or Other.timecheck("hour") == 30:
+        live("GBP_CAD")
 # pairList = ["GBP_CAD"]
 # print(datetime.now().strftime("%Y-%m-%dT%H:%M:%S"))
 # back()

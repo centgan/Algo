@@ -1,30 +1,30 @@
 {
-    "time": "2021-08-27T19:39:37.348477683Z",
+    "time": "2021-08-27T21:00:50.399247666Z",
     "prices": [
         {
             "type": "PRICE",
-            "time": "2021-08-27T19:39:31.437039520Z",
+            "time": "2021-08-27T20:59:54.428814905Z",
             "bids": [
                 {
-                    "price": "1.48824",
+                    "price": "1.37546",
                     "liquidity": 10000000
                 }
             ],
             "asks": [
                 {
-                    "price": "1.48844",
+                    "price": "1.37696",
                     "liquidity": 10000000
                 }
             ],
-            "closeoutBid": "1.48824",
-            "closeoutAsk": "1.48844",
-            "status": "tradeable",
-            "tradeable": true,
+            "closeoutBid": "1.37546",
+            "closeoutAsk": "1.37696",
+            "status": "non-tradeable",
+            "tradeable": false,
             "quoteHomeConversionFactors": {
-                "positiveUnits": "1.00000000",
-                "negativeUnits": "1.00000000"
+                "positiveUnits": "1.26149000",
+                "negativeUnits": "1.26249000"
             },
-            "instrument": "EUR_CAD"
+            "instrument": "GBP_USD"
         }
     ]
 }
