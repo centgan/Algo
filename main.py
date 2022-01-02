@@ -26,7 +26,7 @@ def init():
 def back():
     con3 = False
     init()
-    with open("Historicaldata.json", "r") as read:
+    with open("5M.json", "r") as read:
         data = json.load(read)
     with open("cur.json", "r") as read:
         cur = json.load(read)
@@ -70,7 +70,7 @@ def back():
 def live(pair):
     con3 = False
     proper = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    with open("Historicaldata.json", "r") as read:
+    with open("5M.json", "r") as read:
         data = json.load(read)
     with open("cur.json", "r") as read:
         cur = json.load(read)
@@ -81,67 +81,68 @@ def live(pair):
     bid = float(cur["prices"][0]["bids"][0]["price"])
     asks = float(cur["prices"][0]["asks"][0]["price"])
 
-    if len(orders[pair]["open"]) == 0:
-        if Other.timecheck("hour") == 60 or Other.timecheck("hour") == 30:
-            Indicators.dumpcur(pair)
-            Indicators.dumphis(pair, "M30")
-            Indicators.machis()
-            Indicators.atrhis()
-            Indicators.cmfhis()
-            if float(data[-2]["macd"][0]) > 0 and float(data[-2]["macd"][1]) > 0:
-                con1 = float(data[-3]["macd"][0]) < float(data[-3]["macd"][1])
-                con2 = float(data[-2]["macd"][0]) > float(data[-2]["macd"][1])
-                if float(data[-2]["cmf"]) > 0:
-                    con3 = True
-                elif float(data[-2]["cmf"]) == 0 and float(data[-2]["cmf"]) > 0:
-                    con3 = True
-                else:
-                    con3 = False
-                if con1 and con2 and con3:
-                    # place the order, possibly create a new function to do this
-                    tp = bid + (float(data[-2]["atr"]) * 4)
-                    sl = bid - (float(data[-2]["atr"]) * 2)
-                    place(pair, tp, sl, bid, proper)
-                elif float(data[-3]["macd"][0]) < 0 or float(data[-3]["macd"][1]) < 0:
-                    # place the order, possibly create a new function to do this
-                    tp = bid + (float(data[-2]["atr"]) * 4)
-                    sl = bid - (float(data[-2]["atr"]) * 2)
-                    place(pair, tp, sl, bid, proper)
-            elif float(data[-2]["macd"][0]) < 0 and float(data[-2]["macd"][1]) < 0:
-                con1 = float(data[-3]["macd"][0]) > float(data[-3]["macd"][1])
-                con2 = float(data[-2]["macd"][0]) < float(data[-2]["macd"][1])
-                if float(data[-2]["cmf"]) < 0:
-                    con3 = True
-                elif float(data[-2]["cmf"]) == 0 and float(data[-2]["cmf"]) < 0:
-                    con3 = True
-                else:
-                    con3 = False
-                if con1 and con2 and con3:
-                    tp = asks - (float(data[-2]["atr"]) * 4)
-                    sl = asks + (float(data[-2]["atr"]) * 2)
-                    # place the order, possibly create a new function to do this
-                    place(pair, tp, sl, asks, proper)
-                elif float(data[-3]["macd"][0]) > 0 or float(data[-3]["macd"][1]) > 0:
-                    # place the order, possibly create a new function to do this
-                    tp = asks - (float(data[-2]["atr"]) * 4)
-                    sl = asks + (float(data[-2]["atr"]) * 2)
-                    place(pair, tp, sl, asks, proper)
-    else:
-        watch(pair)
+    init()
+    # Indicators.dumpcur(pair)
+    # Indicators.dumphis(pair, "M30")
+    # Indicators.machis()
+    # Indicators.atrhis()
+    # Indicators.cmfhis()
+    if float(data[-2]["macd"][0]) > 0 and float(data[-2]["macd"][1]) > 0:
+        con1 = float(data[-3]["macd"][0]) < float(data[-3]["macd"][1])
+        con2 = float(data[-2]["macd"][0]) > float(data[-2]["macd"][1])
+        if float(data[-2]["cmf"]) > 0:
+            con3 = True
+        elif float(data[-2]["cmf"]) == 0 and float(data[-2]["cmf"]) > 0:
+            con3 = True
+        else:
+            con3 = False
+        if con1 and con2 and con3 and (float(data[-2]["macd"][0]) > 0.0003 or float(data[-2]["macd"][1]) > 0.0003):
+            # place the order, possibly create a new function to do this
+            tp = bid + (float(data[-2]["atr"]) * 4)
+            sl = bid - (float(data[-2]["atr"]) * 2)
+            place(pair, tp, sl, bid, proper)
+        elif float(data[-3]["macd"][0]) < 0 or float(data[-3]["macd"][1]) < 0:
+            # place the order, possibly create a new function to do this
+            tp = bid + (float(data[-2]["atr"]) * 4)
+            sl = bid - (float(data[-2]["atr"]) * 2)
+            place(pair, tp, sl, bid, proper)
+    elif float(data[-2]["macd"][0]) < 0 and float(data[-2]["macd"][1]) < 0:
+        con1 = float(data[-3]["macd"][0]) > float(data[-3]["macd"][1])
+        con2 = float(data[-2]["macd"][0]) < float(data[-2]["macd"][1])
+        if float(data[-2]["cmf"]) < 0:
+            con3 = True
+        elif float(data[-2]["cmf"]) == 0 and float(data[-2]["cmf"]) < 0:
+            con3 = True
+        else:
+            con3 = False
+        if con1 and con2 and con3 and (float(data[-2]["macd"][0]) < 0.0003 or float(data[-2]["macd"][1]) < 0.0003):
+            tp = asks - (float(data[-2]["atr"]) * 4)
+            sl = asks + (float(data[-2]["atr"]) * 2)
+            # place the order, possibly create a new function to do this
+            place(pair, tp, sl, asks, proper)
+        elif float(data[-3]["macd"][0]) > 0 or float(data[-3]["macd"][1]) > 0:
+            # place the order, possibly create a new function to do this
+            tp = asks - (float(data[-2]["atr"]) * 4)
+            sl = asks + (float(data[-2]["atr"]) * 2)
+            place(pair, tp, sl, asks, proper)
+    # else:
+    #     watch(pair)
 
 
 def place(pair, tp, sl, cur, time, lot="0.01"):
     with open("Orders.json", "r") as read:
-        orders = json.load(read)
+        order = json.load(read)
     pair_list = {
         "GBP_CAD": []
     }
     if float(tp) > float(cur):
-        orders[pair]["open"].append(["buy", cur, sl, tp, time, lot])
+        order[pair]["open"].append(["buy", cur, sl, tp, time, lot])
     elif float(tp) < float(cur):
-        orders[pair]["open"].append(["sell", cur, sl, tp, time, lot])
-    mouse.position = pair_list[pair]
-    mouse.click(Button.left, 2)
+        order[pair]["open"].append(["sell", cur, sl, tp, time, lot])
+    with open("Orders.json", "w") as out:
+        out.write(json.dumps(order, indent=4))
+    # mouse.position = pair_list[pair]
+    # mouse.click(Button.left, 2)
     # keyboard.type("123")
 
 
@@ -169,14 +170,31 @@ def watch(pair):
                 modify("be")
 
 
+Indicators.dumphis("GBP_USD", "M5", "5M.json")
+Indicators.dumphis("GBP_USD", "M15", "15M.json")
+Indicators.dumphis("GBP_USD", "M15", "1H.json")
+Indicators.machis()
+Indicators.emaTime("15M.json")
+Indicators.emaTime("1H.json")
+
+# result = Indicators.supres()
+#
+# print(result[0])
+#
+# print(result[1])
+
+# with open("5M.json", "r") as read:
+#     data = json.load(read)
+# print(float(data[0]["mid"]["h"]))
+
 # watch("GBP_CAD")
 # back()
-while True:
-    with open("Orders.json", "r") as read:
-        orders = json.load(read)
-    # if len(orders["GBP_CAD"]["open"]) == 0:
-    if Other.timecheck("hour") == 60 or Other.timecheck("hour") == 30:
-        live("GBP_CAD")
+# while True:
+#     with open("Orders.json", "r") as read:
+#         orders = json.load(read)
+#     # if len(orders["GBP_CAD"]["open"]) == 0:
+#     if Other.timecheck("hour") == 60 or Other.timecheck("hour") == 30:
+#         live("GBP_CAD")
 # pairList = ["GBP_CAD"]
 # print(datetime.now().strftime("%Y-%m-%dT%H:%M:%S"))
 # back()
