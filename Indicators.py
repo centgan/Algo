@@ -3,6 +3,7 @@ from oandapyV20 import API
 import oandapyV20.endpoints.pricing as pricing
 from oandapyV20.contrib.factories import InstrumentsCandlesFactory
 import Other
+import numpy as np
 
 idaccount = "101-002-19058958-001"
 token = "ae2330665fa73fa2fe986faf62ffd895-2e75bde1f62ad95ada8ce0b42a77b557"
@@ -27,7 +28,7 @@ def dumpcur(instrument):
     params = {"instruments": instrument}
     r = pricing.PricingInfo(accountID=idaccount, params=params)
 
-    with open("cur.json", "w") as out:
+    with open("JSON/cur.json", "w") as out:
         client.request(r)
         out.write(json.dumps(r.response, indent=4))
 
@@ -36,7 +37,7 @@ def emahis():
     ema12, ema26 = [], []
     k = 2/13
     total = 0
-    with open("5M.json", "r") as read:
+    with open("JSON/5M.json", "r") as read:
         data = json.load(read)
     for i in range(len(data)):
         if i > 11:
@@ -66,7 +67,7 @@ def emahis():
                 fin = round(e + em, 6)
                 ema26.append(fin)
                 data[i].__setitem__("ema26", fin)
-    with open("5M.json", "w") as out:
+    with open("JSON/5M.json", "w") as out:
         out.write(json.dumps(data, indent=4))
 
 
@@ -95,12 +96,14 @@ def emaTime(file):
         out.write(json.dumps(data, indent=4))
 
 
+# 0 is macd 1 is the signal
 def machis():
     emahis()
     # mc = []
+    mac = np.array([])
     k = 2/10
     total = 0
-    with open("5M.json", "r") as read:
+    with open("JSON/5M.json", "r") as read:
         data = json.load(read)
     for i in range(27, len(data)):
         ema12 = float(data[i]["ema12"])
@@ -108,6 +111,7 @@ def machis():
         macd = round(ema12 - ema26, 6)
         # mc.append(macd)
         data[i].__setitem__("macd", [macd])
+        mac = np.append(mac, [macd])
         if i > 35:
             if i == 36:
                 for j in range(i-8, i+1):
@@ -119,12 +123,13 @@ def machis():
                 si = float(data[i-1]["macd"][1]) * (1-k)
                 fin = round(s + si, 6)
                 data[i]["macd"].append(fin)
-    with open("5M.json", "w") as out:
+    with open("JSON/5M.json", "w") as out:
         out.write(json.dumps(data, indent=4))
+    return mac
 
 
 def atrhis():
-    with open("5M.json", "r") as read:
+    with open("JSON/5M.json", "r") as read:
         data = json.load(read)
     largest = []
     for i in range(len(data)):
@@ -144,13 +149,13 @@ def atrhis():
                 total = round(total - 0.00005, 6)
                 # print(total)
                 data[i].__setitem__("atr", total)
-    with open("5M.json", "w") as out:
+    with open("JSON/5M.json", "w") as out:
         out.write(json.dumps(data, indent=4))
 
 
 def cmfhis():
     mfl = []
-    with open("5M.json", "r") as read:
+    with open("JSON/5M.json", "r") as read:
         data = json.load(read)
     for i in range(len(data)):
         m = float(data[i]["mid"]["c"]) - float(data[i]["mid"]["l"])
@@ -168,7 +173,7 @@ def cmfhis():
             # print(money, vol, data[i]["time"])
             cmf = round(money / vol, 6)
             data[i].__setitem__("cmf", cmf)
-    with open("5M.json", "w") as out:
+    with open("JSON/5M.json", "w") as out:
         out.write(json.dumps(data, indent=4))
     # print(mfl)
 
@@ -176,7 +181,7 @@ def cmfhis():
 def supres():
     suplist = []
     reslist = []
-    with open("5M.json", "r") as read:
+    with open("JSON/5M.json", "r") as read:
         data = json.load(read)
     for i in range(len(data)):
         if (i > 1) and (i < len(data)-1):

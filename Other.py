@@ -14,6 +14,11 @@ def start():
     return proper
 
 
+def current():
+    now = datetime.now()
+    return now.strftime("%H:%M:%S")
+
+
 def converter(pp, val, pair):
     pip = {
         "GBP_AUD": 0.0001,
