@@ -4,6 +4,7 @@
 # Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
 
 import Indicators
+import Orders
 import Other
 import json
 from datetime import datetime, timedelta
@@ -17,25 +18,58 @@ mouse = Controller()
 # keyboard = Controller()
 
 
-Indicators.dumphis("GBP_USD", "M5", "JSON/5M.json")
-# Indicators.dumphis("GBP_USD", "M15", "15M.json")
-# Indicators.dumphis("GBP_USD", "H1", "1H.json")
-mac = Indicators.machis()
+while True:
+    now = Other.current()
+    now = int(datetime.strptime(now, "%H:%M:%S").time().minute)
+    if now == 00:
+        Indicators.dumphis("GBP_USD", "M5", "JSON/5M.json")
+        Indicators.dumphis("GBP_USD", "M15", "JSON/15M.json")
+        Indicators.dumphis("GBP_USD", "H1", "JSON/1H.json")
+        mac = Indicators.machis()
+        reverse = mac * -1
+        peak = find_peaks(mac)[0]
+        valley = find_peaks(reverse)[0]
+        order = Orders.live5M(peak, valley)
+        print(order)
+    elif now % 15 == 0:
+        Indicators.dumphis("GBP_USD", "M5", "JSON/5M.json")
+        Indicators.dumphis("GBP_USD", "M15", "JSON/15M.json")
+        mac = Indicators.machis()
+        reverse = mac * -1
+        peak = find_peaks(mac)[0]
+        valley = find_peaks(reverse)[0]
+        order = Orders.live5M(peak, valley)
+        print(order)
+    elif now % 5 == 0:
+        Indicators.dumphis("GBP_USD", "M5", "JSON/5M.json")
+        mac = Indicators.machis()
+        reverse = mac * -1
+        peak = find_peaks(mac)[0]
+        valley = find_peaks(reverse)[0]
+        order = Orders.live5M(peak, valley)
+        print(order)
+    print("works")
 
-# reverse = mac*-1
-peak = find_peaks(mac)[0]
-# valley = find_peaks(reverse)[0]
+
+# Indicators.dumphis("GBP_USD", "M5", "JSON/5M.json")
+# # Indicators.dumphis("GBP_USD", "M15", "15M.json")
+# # Indicators.dumphis("GBP_USD", "H1", "1H.json")
+# mac = Indicators.machis()
+#
+# # reverse = mac*-1
+# peak = find_peaks(mac)[0]
+# # valley = find_peaks(reverse)[0]
+# # print(peak)
+# # print(valley)
+# with open("JSON/5M.json", "r") as read:
+#     data5 = json.load(read)
+#
 # print(peak)
-# print(valley)
-with open("JSON/5M.json", "r") as read:
-    data5 = json.load(read)
-
-print(peak)
-# print(peak[-1])
-sliced = data5[peak[-2]:peak[-1]]
-print(sliced)
-sliced.sort(key=lambda x: x["macd"][0])
-print(sliced)
+# # print(peak[-1])
+# sliced = data5[peak[-2]:peak[-1]]
+# print(sliced)
+# sliced.sort(key=lambda x: x["macd"][0])
+# print(sliced)
 
 
 

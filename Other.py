@@ -8,7 +8,7 @@ def start():
     if day == 5:
         subtract = 240 + hours
     else:
-        subtract = 336
+        subtract = 168
     timesubtract = timezone - timedelta(hours=subtract)
     proper = timesubtract.strftime("%Y-%m-%dT%H:00:00Z")
     return proper

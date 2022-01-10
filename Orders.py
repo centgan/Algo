@@ -15,6 +15,9 @@ def live5M(peaks, valleys, bypass=0):
 
     with open("JSON/1H.json", "r") as read:
         data1 = json.load(read)
+    now = Other.current()
+    longs = []
+    shorts = []
 
     # long
     # check if 15 ema is higher than 60 ema
@@ -30,7 +33,7 @@ def live5M(peaks, valleys, bypass=0):
                 if sliced[0]["macd"][0] < 0:
                     # check if macd crosses over the signal line
                     if (data5[-3]["macd"][0] < data5[-2]["macd"][1]) and (data5[-3]["macd"][0] > data5[-2]["macd"][1]):
-                        now = Other.current()
+                        longs.append(["long", now])
                         print("long ", now)
                         # place()
     # shorts
@@ -47,9 +50,10 @@ def live5M(peaks, valleys, bypass=0):
                 if sliced[0]["macd"][0] > 0:
                     # check if signal crosses over the macd line
                     if (data5[-3]["macd"][0] > data5[-2]["macd"][1]) and (data5[-3]["macd"][0] < data5[-2]["macd"][1]):
-                        now = Other.current()
+                        shorts.append(["short", now])
                         print("short ", now)
                         # place()
+    return longs, shorts
 
 
 def place(pair, tp, sl, cur, time, lot="0.01"):
