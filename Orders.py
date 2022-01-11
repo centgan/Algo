@@ -1,5 +1,4 @@
 import json
-import Indicators
 
 
 # if bypass == 1 its a long if bypass == 2 its a short
@@ -25,7 +24,7 @@ def live5M(peaks, valleys, bypass=0):
         # check if the macd and signal lines are below the 0 line
         if (float(data5[-2]["macd"][0]) < 0) and (float(data5[-2]["macd"][1]) < 0) or bypass:
             # check if there is a bullish divergence (higher low on macd and lower low on price)
-            if (data5[valleys[-1]["macd"][0]] > data5[valleys[-2]["macd"][0]]) and \
+            if (data5[valleys[-1]]["macd"][0] > data5[valleys[-2]]["macd"][0]) and \
                     (data5[valleys[-1]]["mid"]["l"] < data5[valleys[-2]]["mid"]["l"]):
                 # check if macd ever crosses above the 0 line
                 sliced = data5[peaks[-1]:peaks[-2]]
@@ -42,7 +41,7 @@ def live5M(peaks, valleys, bypass=0):
         # check if the macd and signal lines are above the 0 line
         if (float(data5[-2]["macd"][0]) > 0) and (float(data5[-2]["macd"][1]) > 0) or bypass:
             # check if there is a bearish divergence (lower high on macd and higher high on price)
-            if (data5[peaks[-1]["macd"][0]] < data5[peaks[-2]["macd"][0]]) and \
+            if (data5[peaks[-1]]["macd"][0] < data5[peaks[-2]]["macd"][0]) and \
                     (data5[peaks[-1]]["mid"]["h"] > data5[peaks[-2]]["mid"]["h"]):
                 # check if macd ever crosses below the 0 line
                 sliced = data5[peaks[-1]:peaks[-2]]

@@ -17,37 +17,38 @@ from scipy.signal import find_peaks
 mouse = Controller()
 # keyboard = Controller()
 
-
+pair = ["GBP_USD", "EUR_USD", "AUD_USD", "USD_JPY", "USD_CAD"]
 while True:
     now = Other.current()
     now = int(datetime.strptime(now, "%H:%M:%S").time().minute)
-    if now == 00:
-        Indicators.dumphis("GBP_USD", "M5", "JSON/5M.json")
-        Indicators.dumphis("GBP_USD", "M15", "JSON/15M.json")
-        Indicators.dumphis("GBP_USD", "H1", "JSON/1H.json")
-        mac = Indicators.machis()
-        reverse = mac * -1
-        peak = find_peaks(mac)[0]
-        valley = find_peaks(reverse)[0]
-        order = Orders.live5M(peak, valley)
-        print(order)
-    elif now % 15 == 0:
-        Indicators.dumphis("GBP_USD", "M5", "JSON/5M.json")
-        Indicators.dumphis("GBP_USD", "M15", "JSON/15M.json")
-        mac = Indicators.machis()
-        reverse = mac * -1
-        peak = find_peaks(mac)[0]
-        valley = find_peaks(reverse)[0]
-        order = Orders.live5M(peak, valley)
-        print(order)
-    elif now % 5 == 0:
-        Indicators.dumphis("GBP_USD", "M5", "JSON/5M.json")
-        mac = Indicators.machis()
-        reverse = mac * -1
-        peak = find_peaks(mac)[0]
-        valley = find_peaks(reverse)[0]
-        order = Orders.live5M(peak, valley)
-        print(order)
+    for i in pair:
+        if now == 0:
+            Indicators.dumphis(i, "M5", "JSON/5M.json")
+            Indicators.dumphis(i, "M15", "JSON/15M.json")
+            Indicators.dumphis(i, "H1", "JSON/1H.json")
+            mac = Indicators.machis()
+            reverse = mac * -1
+            peak = find_peaks(mac)[0]
+            valley = find_peaks(reverse)[0]
+            order = Orders.live5M(peak, valley)
+            print(order)
+        elif now % 15 == 0:
+            Indicators.dumphis(i, "M5", "JSON/5M.json")
+            Indicators.dumphis(i, "M15", "JSON/15M.json")
+            mac = Indicators.machis()
+            reverse = mac * -1
+            peak = find_peaks(mac)[0]
+            valley = find_peaks(reverse)[0]
+            order = Orders.live5M(peak, valley)
+            print(order)
+        elif now % 5 == 0:
+            Indicators.dumphis(i, "M5", "JSON/5M.json")
+            mac = Indicators.machis()
+            reverse = mac * -1
+            peak = find_peaks(mac)[0]
+            valley = find_peaks(reverse)[0]
+            order = Orders.live5M(peak, valley)
+            print(order)
     print("works")
 
 
